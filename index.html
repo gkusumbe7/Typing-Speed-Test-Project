@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>typingSpeedProject</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-yellow-400">
+    <main class="flex justify-center ">
+        <div class="flex flex-col mt-10 items-center bg-yellow-200 border  border-pink-500 shadow-xl p-2">
+
+            <div class="flex gap-x-5 p-5 text-center">
+
+                <img src="https://www.typingtest.com/forms/img/lady.svg" alt="typingImg1" class="m-5">
+                
+                <div class="flex flex-col items-center gap-y-2"> 
+                    <p class="font-bold text-3xl ">Typing Speed Test</p><br>
+                    <p id="generatedText" class="font-semibold text-xl  h-10 w-80" >Press Start Button</p>
+                    <textarea name="textarea" id="textareaInput" cols="70" rows="10" class="disabled mt-2 p-5 rounded-2xl border shadow-xl border-pink-500  text-pink-600 font-semibold text-xl"></textarea>    
+                </div>
+                
+                <img src="https://www.typingtest.com/theme/img/gentleman.svg" alt="typingImg2">        
+            </div>
+            
+
+            <div class="flex gap-x-5 justify-center mb-2">
+                <p class="text-left font-bold p-2 bg-green-50 shadow-xl rounded-xl text-base  border border-black w-24">Timer: <span id="wpmValue"></span> </p>
+                <p class="text-left font-bold p-2 bg-green-50 shadow-xl rounded-xl text-base  border border-black w-24">WPM: <span id="wpmValue"></span> </p>
+                <button id="startBtn" class="text-center font-bold p-1 bg-green-100 hover:bg-yellow-500 shadow-xl rounded-xl text-base border border-black w-20">START</button>
+            </div>
+        </div>
+    </main>
+    <script>
+        
+        let generatedTextEle =  document.getElementById("generatedText")
+        let textareaInputEle = document.getElementById("textareaInput");
+        let wpmValue = document.getElementById("wpmValue");
+        let startBtn = document.getElementById("startBtn");
+        
+
+        // console.log(generatedTextEle , textareaInputEle , wpmValue , startBtn);
+        let startTime, endTime, totalTimeTaken;
+
+
+        const sentence = [
+        "JavaScript can be used for both front-end and back-end development" , 
+        "web applications faster and more responsive.",
+        "JavaScript has a large and active community of developers"    
+    ];
+
+
+
+    const calculateTypingSpeed = (totalTimeTake) =>{
+        // let totalWords = textareaInputEle.value;
+        let totalWords = textareaInputEle.value.trim();
+        
+        let actualWords = totalWords === '' ? 0 :  totalWords.split(" ").length;
+        
+
+        if(actualWords !== 0 ){
+            let typingSpeed = (actualWords / totalTimeTake ) * 60;
+            typingSpeed = Math.round(typingSpeed);
+            wpmValue.innerText = typingSpeed;
+            
+        }else{
+            wpmValue.innerText = 0;
+        }
+
+    }
+
+    const endTypingTest = () =>{
+            startBtn.innerText = "Start";
+            let date = new Date();
+            endTime = date.getTime();
+            console.log("End Time : ",endTime) ;
+            totalTimeTaken = (endTime - startTime ) / 1000;
+            
+            calculateTypingSpeed(totalTimeTaken);
+
+            generatedTextEle.innerText = "";
+
+            textareaInputEle.value = "";
+        }    
+    
+    
+    const startTyping = () =>{
+                let randomNumber = Math.floor(Math.random() * sentence.length);
+            
+                generatedTextEle.innerText = sentence[randomNumber];
+                let date = new Date();
+                startTime = date.getTime();
+                console.log("Start Time: ", startTime );
+                startBtn.innerText = "Done";
+        }
+
+        
+
+        startBtn.addEventListener("click" , ()=>{
+            switch(startBtn.innerText.toLowerCase()){
+                case "start":
+                    textareaInputEle.removeAttribute("disabled");
+                    startTyping();
+                    break;
+
+                case "done":
+                    textareaInputEle.setAttribute("disabled", true);
+                    endTypingTest();
+                    break;
+
+            }
+            
+        })
+
+
+    </script>
+</body>
+</html>
